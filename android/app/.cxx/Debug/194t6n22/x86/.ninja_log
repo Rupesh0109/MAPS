@@ -1,0 +1,12 @@
+# ninja log v5
+1	4	0	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86/CMakeFiles/cmake.verify_globs	c7dfdf56909babdf
+1	1324	1737301951653736630	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/EventEmitters.cpp.o	e34d79ae76509f9d
+1	1680	1737301952005480798	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/ShadowNodes.cpp.o	5f99d81366afa5c
+1	1702	1737301952027464935	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/rnasyncstorageJSI-generated.cpp.o	944d932022f81595
+1	1723	1737301952054445465	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/States.cpp.o	d52410170c02f23
+1	1822	1737301952148377684	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/rnasyncstorage-generated.cpp.o	68e4434293ed34fe
+1	1840	1737301952168363262	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/Props.cpp.o	dbb925c47fae7bdb
+0	1844	1737301952169362541	CMakeFiles/appmodules.dir/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	f9536bc5034a9dc1
+0	2104	1737301952427176502	CMakeFiles/appmodules.dir/OnLoad.cpp.o	2c0218684b17fae7
+0	2215	1737301952541094298	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/ComponentDescriptors.cpp.o	e19627afd81c02ba
+2215	2275	1737301952609045265	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/build/intermediates/cxx/Debug/194t6n22/obj/x86/libappmodules.so	2c04210942dfbde5

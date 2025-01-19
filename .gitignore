@@ -1,0 +1,110 @@
+# General
+node_modules/
+*.log
+*.tsbuildinfo
+.DS_Store
+*.swp
+.vscode/
+.idea/
+.gradle/
+build/
+*.iml
+
+# React Native specific
+ios/Pods/
+android/.gradle/
+android/app/build/
+android/build/
+android/.idea/
+*.keystore
+*.jks
+
+# Exclude local settings and caches
+.env
+.env.*
+*.local
+*.lock
+
+# Exclude Metro, React Native cache
+.expo/
+.expo-shared/
+.react-native-packager-cache/
+__generated__/
+*.hmap
+.packager/
+*.packager.*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Generated files
+*.map
+*.bak
+*.backup
+*.orig
+*.rej
+*.log.*
+
+# OS-specific files
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# Optional lint/format/cache files
+.cache/
+.prettiercache
+.eslintcache
+
+# Android Studio related
+android/local.properties
+caches/
+outputs/
+captures/
+
+# Exclude Xcode workspace files
+ios/Pods/
+ios/build/
+ios/DerivedData/
+*.xcworkspace
+xcuserdata/
+*.xcuserdatad
+*.mode1v3
+*.pbxuser
+*.xccheckout
+*.xcscmblueprint
+*.xcscheme
+
+# Exclude compiled assets
+*.bundle
+*.jsbundle
+*.js.map
+*.js.flow
+*.ts.map
+
+# Exclude debug-specific files
+debug.keystore
+react-native-debugger/
+
+# Coverage output
+coverage/
+
+# Exclude IntelliJ/JetBrains IDE-specific files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Exclude TypeScript build artifacts
+dist/
+build/
+
+# Miscellaneous
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Exclude any files in a custom folder (if applicable)
+assets/*.apk
