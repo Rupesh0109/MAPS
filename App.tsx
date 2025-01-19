@@ -1,28 +1,29 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
     SafeAreaView,
     Text,
-    Image,
     Button,
-    AppState,
     View,
-    FlatList,
-    ScrollView,
     Switch,
-} from 'react-native'
-import RNAndroidNotificationListener from 'react-native-android-notification-listener'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import styles from './styles'
+    AppState,
+    ScrollView,
+    Image,
+} from 'react-native';
+import RNAndroidNotificationListener from 'react-native-android-notification-listener';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from './styles';
 
-let interval: any = null
+let interval: any = null;
 
 interface INotificationProps {
-    time: string
-    direction: string
-    distance: string
-    icon: string
-    eta?: string // optional ETA
-    totdistanc?: string // optional total distance
+    time?: string;
+    direction?: string;
+    distance?: string;
+    icon: string;
+    eta?: string;
+    totdistanc?: string;
+    text?: string;
+    app?: string;
 }
 
 const Notification: React.FC<INotificationProps> = ({
@@ -32,12 +33,10 @@ const Notification: React.FC<INotificationProps> = ({
     distance,
     eta,
     totdistanc,
+    text,
 }) => {
-    // Split the time string into time, distance, and eta
-    const [timeStr, distanceStr, etaStr] = time?.split(' · ') || []
-
-    // Clean up any non-breaking spaces in the data
-    const cleanText = (text: string) => text.replace(/\u00A0/g, ' ')
+    const [timeStr, distanceStr, etaStr] = time?.split(' · ') || [];
+    const cleanText = (text: string) => text.replace(/\u00A0/g, ' ');
 
     return (
         <View style={styles.notificationWrapper}>
@@ -45,10 +44,7 @@ const Notification: React.FC<INotificationProps> = ({
                 <View style={styles.imagesWrapper}>
                     {!!icon && (
                         <View style={styles.notificationIconWrapper}>
-                            <Image
-                                source={{ uri: icon }}
-                                style={styles.notificationIcon}
-                            />
+                            <Image source={{ uri: icon }} style={styles.notificationIcon} />
                         </View>
                     )}
                 </View>
@@ -74,81 +70,85 @@ const Notification: React.FC<INotificationProps> = ({
                     {!!totdistanc && (
                         <Text style={styles.textInfo}>{`Total Distance: ${cleanText(totdistanc)}`}</Text>
                     )}
+                    {!!text && <Text style={styles.textInfo}>{text}</Text>}
                 </View>
             </View>
         </View>
-    )
-}
+    );
+};
 
 function App() {
-    const [hasPermission, setHasPermission] = useState(false)
-    const [lastNotification, setLastNotification] = useState<any>(null)
+    const [hasPermission, setHasPermission] = useState(false);
+    const [lastNotification, setLastNotification] = useState<any>(null);
+    const [selectedApp, setSelectedApp] = useState<string>('com.google.android.apps.maps');
+    const [appEnabled, setAppEnabled] = useState({
+        maps: true,
+        phone: false,
+        whatsapp: false,
+        other: false,
+    });
 
     const handleOnPressPermissionButton = async () => {
-        /**
-         * Open the notification settings so the user
-         * can enable it
-         */
-        RNAndroidNotificationListener.requestPermission()
-    }
-
-    const handleAppStateChange = async (
-        nextAppState: string,
-        force = false
-    ) => {
-        if (nextAppState === 'active' || force) {
-            const status =
-                await RNAndroidNotificationListener.getPermissionStatus()
-            setHasPermission(status !== 'denied')
+        try {
+            await RNAndroidNotificationListener.requestPermission();
+            const status = await RNAndroidNotificationListener.getPermissionStatus();
+            setHasPermission(status !== 'denied');
+        } catch (error) {
+            console.error('Permission request failed:', error);
         }
-    }
+    };
 
-    const handleCheckNotificationInterval = async () => {
-        const lastStoredNotification = await AsyncStorage.getItem(
-            '@lastNotification'
-        )
+    const fetchLatestNotification = async () => {
+        try {
+            const lastStoredNotification =
+                selectedApp === 'com.google.android.apps.maps'
+                    ? await AsyncStorage.getItem('@navigationNotification')
+                    : await AsyncStorage.getItem('@otherNotification');
 
-        if (lastStoredNotification) {
-            /**
-             * As the notification is a JSON string,
-             * here I just parse it
-             */
-            setLastNotification(JSON.parse(lastStoredNotification))
+            if (lastStoredNotification) {
+                setLastNotification(JSON.parse(lastStoredNotification));
+            } else {
+                setLastNotification(null);
+            }
+        } catch (error) {
+            console.error('Failed to fetch notification:', error);
         }
-    }
+    };
 
     useEffect(() => {
-        clearInterval(interval)
-
-        /**
-         * Just setting an interval to check if
-         * there is a notification in AsyncStorage
-         * so I can show it in the application
-         */
-        interval = setInterval(handleCheckNotificationInterval, 1000)
-
-        const listener = AppState.addEventListener(
-            'change',
-            handleAppStateChange
-        )
-
-        handleAppStateChange('', true)
-
-        return () => {
-            clearInterval(interval)
-            listener.remove()
+        // Request permissions on first mount
+        if (AppState.currentState === 'active') {
+            handleOnPressPermissionButton();
         }
-    }, [])
 
-    const hasGroupedMessages =
-        lastNotification &&
-        lastNotification.groupedMessages &&
-        lastNotification.groupedMessages.length > 0
+        // Periodic polling for new notifications
+        interval = setInterval(fetchLatestNotification, 500);
 
-    // // Debugging: Log the last notification
-    // useEffect(() => {
-    //     console.log('Last Notification:', lastNotification)
-    // }, [lastNotification])
+        const listener = AppState.addEventListener('change', async (nextAppState) => {
+            if (nextAppState === 'active') {
+                // Recheck permissions and fetch new notifications on app resume
+                const status = await RNAndroidNotificationListener.getPermissionStatus();
+                setHasPermission(status !== 'denied');
+                fetchLatestNotification();
+            }
+        });
+
+        // Clean up
+        return () => {
+            clearInterval(interval);
+            listener.remove();
+        };
+    }, [selectedApp]);
+
+    const handleAppSelection = (app: string) => {
+        setSelectedApp(app);
+        AsyncStorage.removeItem('@lastNotification');
+        fetchLatestNotification();
+    };
+
+    const toggleAppNotifications = (app: string, value: boolean) => {
+        setAppEnabled(prev => ({ ...prev, [app]: value }));
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -163,34 +163,57 @@ function App() {
                         : 'NOT allowed to handle notifications'}
                 </Text>
                 <Button
-                    title='Open Configuration'
+                    title="Open Configuration"
                     onPress={handleOnPressPermissionButton}
                     disabled={hasPermission}
                 />
             </View>
+
+            {/* App Selection */}
+            <View style={styles.appSelectionWrapper}>
+                <Text style={styles.header}>Select App for Notifications</Text>
+                <View style={styles.switchContainer}>
+                    <View style={styles.switchWrapper}>
+                        <Switch
+                            value={appEnabled.maps}
+                            onValueChange={value => toggleAppNotifications('maps', value)}
+                        />
+                        <Text>Google Maps</Text>
+                    </View>
+                    <View style={styles.switchWrapper}>
+                        <Switch
+                            value={appEnabled.phone}
+                            onValueChange={value => toggleAppNotifications('phone', value)}
+                        />
+                        <Text>Phone</Text>
+                    </View>
+                    <View style={styles.switchWrapper}>
+                        <Switch
+                            value={appEnabled.whatsapp}
+                            onValueChange={value => toggleAppNotifications('whatsapp', value)}
+                        />
+                        <Text>WhatsApp</Text>
+                    </View>
+                    <View style={styles.switchWrapper}>
+                        <Switch
+                            value={appEnabled.other}
+                            onValueChange={value => toggleAppNotifications('other', value)}
+                        />
+                        <Text>Other</Text>
+                    </View>
+                </View>
+            </View>
+
+            {/* Display Notification */}
             <View style={styles.notificationsWrapper}>
-                {lastNotification && !hasGroupedMessages && (
+                {lastNotification && appEnabled[selectedApp === 'com.google.android.apps.maps' ? 'maps' : 'other'] && (
                     <ScrollView style={styles.scrollView}>
                         <Notification {...lastNotification} />
                     </ScrollView>
                 )}
-                {lastNotification && hasGroupedMessages && (
-                    <FlatList
-                        data={lastNotification.groupedMessages}
-                        keyExtractor={(_, index) => index.toString()}
-                        renderItem={({ item }) => (
-                            <Notification
-                                app={lastNotification.app}
-                                {...item}
-                            />
-                        )}
-                    />
-                )}
             </View>
-            
-            
         </SafeAreaView>
-    )
+    );
 }
 
-export default App
+export default App;

@@ -1,6 +1,6 @@
-import { Dimensions, StyleSheet } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native';
 
-const { width } = Dimensions.get('screen')
+const { width } = Dimensions.get('screen');
 
 export default StyleSheet.create({
     container: {
@@ -73,7 +73,6 @@ export default StyleSheet.create({
     textInfo: {
         color: '#000',
     },
-    // Add the new style for 'noNotificationText'
     noNotificationText: {
         fontSize: 18,
         color: '#888',
@@ -85,14 +84,23 @@ export default StyleSheet.create({
         paddingHorizontal: 10,
     },
     switchWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        flexDirection: 'row', // Align the switch and label horizontally
+        alignItems: 'center', // Vertically center the items
+        justifyContent: 'flex-start', // Align items to the left
         marginVertical: 5,
+        paddingHorizontal: 10, // Ensure there's space between the switch and the container
     },
     switchLabel: {
         fontSize: 16,
         color: '#333',
+        marginLeft: 10, // Space between the switch and the label
+    },
+    switchContainer: {  // New style for a container around the switch and label
+        marginVertical: 10,  // Adjust the space around the entire switch container
+        paddingHorizontal: 20,  // Padding for the switch container
+        borderWidth: 1,  // Optional: you can add a border to the container
+        borderRadius: 8, // Optional: rounded corners for the container
+        backgroundColor: '#f9f9f9', // Optional: background color for the container
     },
     appTogglesWrapper: {
         marginVertical: 10,
@@ -113,6 +121,22 @@ export default StyleSheet.create({
         fontWeight: 'bold',
         marginVertical: 10,
     },
-    
-    
-})
+    appSelectionWrapper: {
+        marginBottom: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        paddingBottom: 10,
+    },
+    appSelection: {
+        fontSize: 18,
+        color: '#007bff',
+        marginVertical: 5,
+        textAlign: 'center',
+    },
+    header: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        color: '#333',
+    },
+});
