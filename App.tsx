@@ -79,6 +79,7 @@ const Notification: React.FC<INotificationProps> = ({
 
 function App() {
     const [hasPermission, setHasPermission] = useState(false);
+    const [permissionChecked, setPermissionChecked] = useState(false);
     const [lastNotification, setLastNotification] = useState<any>(null);
     const [selectedApp, setSelectedApp] = useState<string>('com.google.android.apps.maps');
     const [appEnabled, setAppEnabled] = useState({
@@ -93,6 +94,7 @@ function App() {
             await RNAndroidNotificationListener.requestPermission();
             const status = await RNAndroidNotificationListener.getPermissionStatus();
             setHasPermission(status !== 'denied');
+            await AsyncStorage.setItem('@hasPermission', status !== 'denied' ? 'true' : 'false');
         } catch (error) {
             console.error('Permission request failed:', error);
         }
@@ -116,9 +118,22 @@ function App() {
     };
 
     useEffect(() => {
-        // Request permissions on first mount
-        if (AppState.currentState === 'active') {
-            handleOnPressPermissionButton();
+        const checkPermissionStatus = async () => {
+            try {
+                const storedPermission = await AsyncStorage.getItem('@hasPermission');
+                if (storedPermission === 'true') {
+                    setHasPermission(true);
+                } else {
+                    handleOnPressPermissionButton();
+                }
+                setPermissionChecked(true);
+            } catch (error) {
+                console.error('Failed to check permission status:', error);
+            }
+        };
+
+        if (!permissionChecked) {
+            checkPermissionStatus();
         }
 
         // Periodic polling for new notifications
@@ -127,8 +142,9 @@ function App() {
         const listener = AppState.addEventListener('change', async (nextAppState) => {
             if (nextAppState === 'active') {
                 // Recheck permissions and fetch new notifications on app resume
-                const status = await RNAndroidNotificationListener.getPermissionStatus();
-                setHasPermission(status !== 'denied');
+                if (!permissionChecked) {
+                    await checkPermissionStatus();
+                }
                 fetchLatestNotification();
             }
         });
@@ -138,7 +154,7 @@ function App() {
             clearInterval(interval);
             listener.remove();
         };
-    }, [selectedApp]);
+    }, [selectedApp, permissionChecked]);
 
     const handleAppSelection = (app: string) => {
         setSelectedApp(app);
