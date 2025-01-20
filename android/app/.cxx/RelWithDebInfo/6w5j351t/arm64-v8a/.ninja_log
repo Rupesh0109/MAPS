@@ -1,0 +1,17 @@
+# ninja log v5
+2	3071	1737373666070477825	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/Props.cpp.o	80bde59a33525c20
+0	3195	1737373666190462872	CMakeFiles/appmodules.dir/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	49c140f5d71aaef8
+3	22	1737385163156943483	build.ninja	9e09ccb71f88499d
+1	2270	1737373665267578222	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/EventEmitters.cpp.o	6f81e76d5f3824cc
+3	2955	1737373665952492551	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/ShadowNodes.cpp.o	7ff63a6ba8d5724
+3600	3637	1737373666649405677	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/build/intermediates/cxx/RelWithDebInfo/6w5j351t/obj/arm64-v8a/libappmodules.so	c1f39f3ac8e1e96a
+1	3600	1737373666596412281	CMakeFiles/appmodules.dir/OnLoad.cpp.o	23e4d884d2758443
+5	3274	1737373666272452654	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/rnasyncstorageJSI-generated.cpp.o	ae5a96a35862e989
+0	2	0	clean	f7d2cf01a74b04f8
+0	2	0	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/RelWithDebInfo/6w5j351t/arm64-v8a/CMakeFiles/cmake.verify_globs	9fa9bdd2b9be8d99
+5	3506	1737373666504423745	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/rnasyncstorage-generated.cpp.o	c156efa3b02b18b6
+4	2211	1737373665199586726	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/States.cpp.o	f5638824d2a91214
+1	2961	1737373665959491675	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/ComponentDescriptors.cpp.o	ccf95718c5cb990d
+2	23	1737385163156943483	build.ninja	9e09ccb71f88499d
+0	3	0	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/RelWithDebInfo/6w5j351t/arm64-v8a/CMakeFiles/cmake.verify_globs	9fa9bdd2b9be8d99
+0	1	0	clean	f7d2cf01a74b04f8

@@ -6,51 +6,53 @@ import App from './App';
 
 // Headless Task to listen for notifications
 const headlessNotificationListener = async ({ notification }) => {
-    if (notification) {
-        try {
-            const data = JSON.parse(notification);
-            
-            if (data.app === 'com.google.android.apps.maps') {
-                let timeStr, distanceStr, etaStr;
+  if (notification) {
+    try {
+      const data = JSON.parse(notification);
 
-                // Split the time string into time, distance, and eta
-                const timeData = data.subText?.split(' · ') || [];
-                timeStr = timeData[0];
-                distanceStr = timeData[1];
-                etaStr = timeData[2];
+      if (data.app === 'com.google.android.apps.maps') {
+        let timeStr, distanceStr, etaStr;
 
-                // Remove " ETA" from the eta string if it exists
-                const cleanedEtaStr = etaStr ? etaStr.replace(' ETA', '') : '';
+        // Split the time string into time, distance, and eta
+        const timeData = data.subText?.split(' · ') || [];
+        timeStr = timeData[0] || '';
+        distanceStr = timeData[1] || '';
+        etaStr = timeData[2] || '';
 
-                const necdata = {
-                    icon: data.iconLarge,
-                    time: timeStr,
-                    direction: data.text,
-                    distance: data.title,
-                    totdistanc: distanceStr,
-                    eta: cleanedEtaStr,
-                };
+        // Clean the eta string if it exists
+        const cleanedEtaStr = etaStr ? etaStr.replace(' ETA', '') : '';
 
-                // Store navigation data
-                await AsyncStorage.setItem('@navigationNotification', JSON.stringify(necdata));
-            } else {
-                // Store other notifications
-                const otherData = {
-                    icon: data.iconLarge,
-                    text: data.text,
-                    app: data.app,
-                };
-                await AsyncStorage.setItem('@otherNotification', JSON.stringify(otherData));
-            }
-        } catch (error) {
-            console.error('Error storing notification:', error);
-        }
+        const necdata = {
+          icon: data.iconLarge,
+          time: timeStr,
+          direction: data.text,
+          distance: data.title,
+          totdistanc: distanceStr,
+          eta: cleanedEtaStr,
+        };
+
+        // Store navigation data in AsyncStorage
+        await AsyncStorage.setItem('@navigationNotification', JSON.stringify(necdata));
+      } else {
+        // Handle other notifications
+        const otherData = {
+          icon: data.iconLarge,
+          text: data.text,
+          app: data.app,
+        };
+
+        // Store other notifications in AsyncStorage
+        await AsyncStorage.setItem('@otherNotification', JSON.stringify(otherData));
+      }
+    } catch (error) {
+      console.error('Error storing notification:', error);
     }
+  }
 };
 
 AppRegistry.registerHeadlessTask(
-    RNAndroidNotificationListenerHeadlessJsName,
-    () => headlessNotificationListener
+  RNAndroidNotificationListenerHeadlessJsName,
+  () => headlessNotificationListener
 );
 
 AppRegistry.registerComponent(appName, () => App);

@@ -1,0 +1,17 @@
+# ninja log v5
+1	2529	1737373678943904243	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/Props.cpp.o	49e048feef2c703c
+0	2523	1737373678936905084	CMakeFiles/appmodules.dir/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	906eff131c6a387e
+3	23	1737385163224944514	build.ninja	50c43e8185e1735
+1	1944	1737373678361974142	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/EventEmitters.cpp.o	bd4a50767cd3ce4d
+1	2381	1737373678797921778	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/ShadowNodes.cpp.o	ba24bf9a6a8a051
+0	3134	1737373679544832228	CMakeFiles/appmodules.dir/OnLoad.cpp.o	93fa66d534f6a6d
+2	2880	1737373679296861938	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/rnasyncstorageJSI-generated.cpp.o	488001031c6b86ce
+0	1	0	clean	f7d2cf01a74b04f8
+2	2749	1737373679164877751	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/rnasyncstorage-generated.cpp.o	54639113f883c7fe
+2	1744	1737373678161998162	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/States.cpp.o	b08927cec84bfe6a
+3134	3184	1737373679610824322	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/build/intermediates/cxx/RelWithDebInfo/6w5j351t/obj/x86_64/libappmodules.so	7999f2feb2b88726
+1	2339	1737373678753927062	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/ComponentDescriptors.cpp.o	6e96ed8231d4e370
+0	2	0	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/RelWithDebInfo/6w5j351t/x86_64/CMakeFiles/cmake.verify_globs	eff8c12f6fc1fa0b
+2	22	1737385163224944514	build.ninja	50c43e8185e1735
+0	3	0	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/RelWithDebInfo/6w5j351t/x86_64/CMakeFiles/cmake.verify_globs	eff8c12f6fc1fa0b
+0	2	0	clean	f7d2cf01a74b04f8

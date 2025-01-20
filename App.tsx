@@ -7,6 +7,7 @@ import {
     Switch,
     AppState,
     ScrollView,
+    FlatList,
     Image,
 } from 'react-native';
 import RNAndroidNotificationListener from 'react-native-android-notification-listener';
@@ -24,6 +25,7 @@ interface INotificationProps {
     totdistanc?: string;
     text?: string;
     app?: string;
+    groupedMessages?: any[];
 }
 
 const Notification: React.FC<INotificationProps> = ({
@@ -79,7 +81,6 @@ const Notification: React.FC<INotificationProps> = ({
 
 function App() {
     const [hasPermission, setHasPermission] = useState(false);
-    const [permissionChecked, setPermissionChecked] = useState(false);
     const [lastNotification, setLastNotification] = useState<any>(null);
     const [selectedApp, setSelectedApp] = useState<string>('com.google.android.apps.maps');
     const [appEnabled, setAppEnabled] = useState({
@@ -90,17 +91,11 @@ function App() {
     });
 
     const handleOnPressPermissionButton = async () => {
-        try {
-            await RNAndroidNotificationListener.requestPermission();
-            const status = await RNAndroidNotificationListener.getPermissionStatus();
-            setHasPermission(status !== 'denied');
-            await AsyncStorage.setItem('@hasPermission', status !== 'denied' ? 'true' : 'false');
-        } catch (error) {
-            console.error('Permission request failed:', error);
-        }
+        RNAndroidNotificationListener.requestPermission();
     };
 
     const fetchLatestNotification = async () => {
+        console.log("Fetching latest notification...");
         try {
             const lastStoredNotification =
                 selectedApp === 'com.google.android.apps.maps'
@@ -108,7 +103,9 @@ function App() {
                     : await AsyncStorage.getItem('@otherNotification');
 
             if (lastStoredNotification) {
-                setLastNotification(JSON.parse(lastStoredNotification));
+                const notificationData = JSON.parse(lastStoredNotification);
+                console.log("Fetched notification data:", notificationData);
+                setLastNotification({ ...notificationData }); // Create a new reference
             } else {
                 setLastNotification(null);
             }
@@ -117,54 +114,44 @@ function App() {
         }
     };
 
-    useEffect(() => {
-        const checkPermissionStatus = async () => {
-            try {
-                const storedPermission = await AsyncStorage.getItem('@hasPermission');
-                if (storedPermission === 'true') {
-                    setHasPermission(true);
-                } else {
-                    handleOnPressPermissionButton();
-                }
-                setPermissionChecked(true);
-            } catch (error) {
-                console.error('Failed to check permission status:', error);
-            }
-        };
+    const handleAppStateChange = async (nextAppState: string, force = false) => {
+        console.log("App state changed to:", nextAppState);
+        if (nextAppState === 'active' || force) {
+            const status = await RNAndroidNotificationListener.getPermissionStatus();
+            setHasPermission(status !== 'denied');
 
-        if (!permissionChecked) {
-            checkPermissionStatus();
+            // Always fetch notifications and force state update
+            fetchLatestNotification()
+                .then(() => console.log("Fetched notifications after app became active."))
+                .catch(err => console.error("Error fetching notifications on state change:", err));
+        }
+    };
+
+    useEffect(() => {
+        clearInterval(interval);
+        if (AppState.currentState === 'active') {
+            interval = setInterval(() => {
+                fetchLatestNotification();
+            }, 1000);
         }
 
-        // Periodic polling for new notifications
-        interval = setInterval(fetchLatestNotification, 500);
+        const listener = AppState.addEventListener('change', handleAppStateChange);
+        handleAppStateChange('', true);
 
-        const listener = AppState.addEventListener('change', async (nextAppState) => {
-            if (nextAppState === 'active') {
-                // Recheck permissions and fetch new notifications on app resume
-                if (!permissionChecked) {
-                    await checkPermissionStatus();
-                }
-                fetchLatestNotification();
-            }
-        });
-
-        // Clean up
         return () => {
             clearInterval(interval);
             listener.remove();
         };
-    }, [selectedApp, permissionChecked]);
-
-    const handleAppSelection = (app: string) => {
-        setSelectedApp(app);
-        AsyncStorage.removeItem('@lastNotification');
-        fetchLatestNotification();
-    };
+    }, [selectedApp]);
 
     const toggleAppNotifications = (app: string, value: boolean) => {
         setAppEnabled(prev => ({ ...prev, [app]: value }));
     };
+
+    const hasGroupedMessages =
+        lastNotification &&
+        lastNotification.groupedMessages &&
+        lastNotification.groupedMessages.length > 0;
 
     return (
         <SafeAreaView style={styles.container}>
@@ -220,12 +207,19 @@ function App() {
                 </View>
             </View>
 
-            {/* Display Notification */}
+            {/* Display Notifications */}
             <View style={styles.notificationsWrapper}>
-                {lastNotification && appEnabled[selectedApp === 'com.google.android.apps.maps' ? 'maps' : 'other'] && (
+                {lastNotification && !hasGroupedMessages && appEnabled.maps && (
                     <ScrollView style={styles.scrollView}>
                         <Notification {...lastNotification} />
                     </ScrollView>
+                )}
+                {lastNotification && hasGroupedMessages && appEnabled.maps && (
+                    <FlatList
+                        data={lastNotification.groupedMessages}
+                        keyExtractor={(_, index) => index.toString()}
+                        renderItem={({ item }) => <Notification {...item} />}
+                    />
                 )}
             </View>
         </SafeAreaView>
