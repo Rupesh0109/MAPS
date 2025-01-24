@@ -1,2 +1,3 @@
+/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt
+/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@saserinn/react-native-battery-optimization-check/android/build/generated/source/codegen/jni/CMakeLists.txt
 /home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt
-/home/rupesh/Desktop/dump/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt

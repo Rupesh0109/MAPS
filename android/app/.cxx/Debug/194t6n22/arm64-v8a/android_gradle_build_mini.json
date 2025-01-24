@@ -1,7 +1,8 @@
 {
   "buildFiles": [
-    "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt",
-    "/home/rupesh/Desktop/dump/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt"
+    "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt",
+    "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@saserinn/react-native-battery-optimization-check/android/build/generated/source/codegen/jni/CMakeLists.txt",
+    "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt"
   ],
   "cleanCommandsComponents": [
     [
@@ -18,6 +19,11 @@
     "{LIST_OF_TARGETS_TO_BUILD}"
   ],
   "libraries": {
+    "react_codegen_BatteryOptimizationCheck::@91def872e19718f25eec": {
+      "artifactName": "react_codegen_BatteryOptimizationCheck",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
     "appmodules::@6890427a1f51a3e7e1df": {
       "artifactName": "appmodules",
       "abi": "arm64-v8a",

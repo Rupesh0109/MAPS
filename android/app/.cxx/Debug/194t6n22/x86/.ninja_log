@@ -1,10 +1,10 @@
 # ninja log v5
 9	1735	1737385230118354315	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/Props.cpp.o	dbb925c47fae7bdb
 8	1875	1737385230255338409	CMakeFiles/appmodules.dir/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	f9536bc5034a9dc1
-3	23	1737385758767340636	build.ninja	aaf582d38f79d612
-0	3	0	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86/CMakeFiles/cmake.verify_globs	c7dfdf56909babdf
-8	1311	1737385229696403372	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/EventEmitters.cpp.o	e34d79ae76509f9d
+3	23	1737690883859915518	build.ninja	aaf582d38f79d612
+1	4	0	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86/CMakeFiles/cmake.verify_globs	c7dfdf56909babdf
 9	1641	1737385230022365460	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/ShadowNodes.cpp.o	5f99d81366afa5c
+8	1311	1737385229696403372	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/EventEmitters.cpp.o	e34d79ae76509f9d
 8	2438	1737385230815273394	CMakeFiles/appmodules.dir/OnLoad.cpp.o	2c0218684b17fae7
 9	2106	1737385230487311475	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/rnasyncstorageJSI-generated.cpp.o	944d932022f81595
 2438	2474	1737385230864267705	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/build/intermediates/cxx/Debug/194t6n22/obj/x86/libappmodules.so	2c04210942dfbde5
@@ -13,5 +13,23 @@
 9	1186	1737385229569418143	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/States.cpp.o	d52410170c02f23
 8	1699	1737385230079358843	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/ComponentDescriptors.cpp.o	e19627afd81c02ba
 0	3	0	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86/CMakeFiles/cmake.verify_globs	c7dfdf56909babdf
+3	1990	1737690885870752729	BatteryOptimizationCheck_autolinked_build/CMakeFiles/react_codegen_BatteryOptimizationCheck.dir/react/renderer/components/BatteryOptimizationCheck/States.cpp.o	2963fdd1fc1914c1
+1	2017	1737690885899750384	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/States.cpp.o	24692fbbeb828009
+2	2198	1737690886080735755	BatteryOptimizationCheck_autolinked_build/CMakeFiles/react_codegen_BatteryOptimizationCheck.dir/react/renderer/components/BatteryOptimizationCheck/EventEmitters.cpp.o	5f9e575bcba17fe6
+1	2219	1737690886100734140	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/EventEmitters.cpp.o	9eb037616d0a6e1c
+1	2452	1737690886334715242	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/ShadowNodes.cpp.o	1b26dd2de877d1ec
+2	2501	1737690886387710962	BatteryOptimizationCheck_autolinked_build/CMakeFiles/react_codegen_BatteryOptimizationCheck.dir/react/renderer/components/BatteryOptimizationCheck/BatteryOptimizationCheckJSI-generated.cpp.o	a2fe6509dca0aa18
+2	2569	1737690886454705551	BatteryOptimizationCheck_autolinked_build/CMakeFiles/react_codegen_BatteryOptimizationCheck.dir/BatteryOptimizationCheck-generated.cpp.o	73845e7e1f366be4
+1	2598	1737690886478703613	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/rnasyncstorageJSI-generated.cpp.o	25ae46aab4b9d50c
+3	2646	1737690886529699495	BatteryOptimizationCheck_autolinked_build/CMakeFiles/react_codegen_BatteryOptimizationCheck.dir/react/renderer/components/BatteryOptimizationCheck/ShadowNodes.cpp.o	90d042a9f94b5a4d
+2	2754	1737690886635690934	BatteryOptimizationCheck_autolinked_build/CMakeFiles/react_codegen_BatteryOptimizationCheck.dir/react/renderer/components/BatteryOptimizationCheck/ComponentDescriptors.cpp.o	3f32f4ed0121e4f4
+0	2756	1737690886636690854	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/ComponentDescriptors.cpp.o	b1a1396ce64c764f
+0	2784	1737690886666688431	CMakeFiles/appmodules.dir/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	5f9f912948e12b9e
+1	2831	1737690886714684554	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/react/renderer/components/rnasyncstorage/Props.cpp.o	86c1ec93fc837c53
+1	2841	1737690886723683828	rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir/rnasyncstorage-generated.cpp.o	2c83fdec563f19bd
+2	2847	1737690886730683262	BatteryOptimizationCheck_autolinked_build/CMakeFiles/react_codegen_BatteryOptimizationCheck.dir/react/renderer/components/BatteryOptimizationCheck/Props.cpp.o	6a5ad411e7424061
+0	3227	1737690887099653475	CMakeFiles/appmodules.dir/OnLoad.cpp.o	c2adf53840f7f3cf
+3227	3297	1737690887186646459	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/build/intermediates/cxx/Debug/194t6n22/obj/x86/libappmodules.so	d8763a81be511173
 1	4	0	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86/CMakeFiles/cmake.verify_globs	c7dfdf56909babdf
+0	4	0	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86/CMakeFiles/cmake.verify_globs	c7dfdf56909babdf
 1	4	0	/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86/CMakeFiles/cmake.verify_globs	c7dfdf56909babdf

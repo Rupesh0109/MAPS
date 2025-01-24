@@ -1,4 +1,4 @@
-# Install script for directory: /home/rupesh/Desktop/dump/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni
+# Install script for directory: /home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

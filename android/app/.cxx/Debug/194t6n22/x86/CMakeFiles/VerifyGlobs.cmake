@@ -12,36 +12,61 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86/CMakeFiles/cmake.verify_globs")
 endif()
 
+# react_codegen_SRCS at /home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/*.cpp")
+set(OLD_GLOB
+  "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/rnasyncstorage-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage/*.cpp")
+set(OLD_GLOB
+  "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage/ComponentDescriptors.cpp"
+  "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage/EventEmitters.cpp"
+  "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage/Props.cpp"
+  "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage/ShadowNodes.cpp"
+  "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage/States.cpp"
+  "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage/rnasyncstorageJSI-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@saserinn/react-native-battery-optimization-check/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@saserinn/react-native-battery-optimization-check/android/build/generated/source/codegen/jni/*.cpp")
+set(OLD_GLOB
+  "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@saserinn/react-native-battery-optimization-check/android/build/generated/source/codegen/jni/BatteryOptimizationCheck-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@saserinn/react-native-battery-optimization-check/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@saserinn/react-native-battery-optimization-check/android/build/generated/source/codegen/jni/react/renderer/components/BatteryOptimizationCheck/*.cpp")
+set(OLD_GLOB
+  "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@saserinn/react-native-battery-optimization-check/android/build/generated/source/codegen/jni/react/renderer/components/BatteryOptimizationCheck/BatteryOptimizationCheckJSI-generated.cpp"
+  "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@saserinn/react-native-battery-optimization-check/android/build/generated/source/codegen/jni/react/renderer/components/BatteryOptimizationCheck/ComponentDescriptors.cpp"
+  "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@saserinn/react-native-battery-optimization-check/android/build/generated/source/codegen/jni/react/renderer/components/BatteryOptimizationCheck/EventEmitters.cpp"
+  "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@saserinn/react-native-battery-optimization-check/android/build/generated/source/codegen/jni/react/renderer/components/BatteryOptimizationCheck/Props.cpp"
+  "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@saserinn/react-native-battery-optimization-check/android/build/generated/source/codegen/jni/react/renderer/components/BatteryOptimizationCheck/ShadowNodes.cpp"
+  "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@saserinn/react-native-battery-optimization-check/android/build/generated/source/codegen/jni/react/renderer/components/BatteryOptimizationCheck/States.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86/CMakeFiles/cmake.verify_globs")
+endif()
+
 # override_cpp_SRC at /home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/react-native/ReactAndroid/cmake-utils/ReactNative-application.cmake:42 (file)
 # input_SRC at /home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/react-native/ReactAndroid/cmake-utils/ReactNative-application.cmake:47 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/*.cpp")
 set(OLD_GLOB
   "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/OnLoad.cpp"
-  )
-if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
-  message("-- GLOB mismatch!")
-  file(TOUCH_NOCREATE "/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86/CMakeFiles/cmake.verify_globs")
-endif()
-
-# react_codegen_SRCS at /home/rupesh/Desktop/dump/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
-file(GLOB NEW_GLOB LIST_DIRECTORIES true "/home/rupesh/Desktop/dump/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/*.cpp")
-set(OLD_GLOB
-  "/home/rupesh/Desktop/dump/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/rnasyncstorage-generated.cpp"
-  )
-if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
-  message("-- GLOB mismatch!")
-  file(TOUCH_NOCREATE "/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86/CMakeFiles/cmake.verify_globs")
-endif()
-
-# react_codegen_SRCS at /home/rupesh/Desktop/dump/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
-file(GLOB NEW_GLOB LIST_DIRECTORIES true "/home/rupesh/Desktop/dump/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage/*.cpp")
-set(OLD_GLOB
-  "/home/rupesh/Desktop/dump/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage/ComponentDescriptors.cpp"
-  "/home/rupesh/Desktop/dump/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage/EventEmitters.cpp"
-  "/home/rupesh/Desktop/dump/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage/Props.cpp"
-  "/home/rupesh/Desktop/dump/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage/ShadowNodes.cpp"
-  "/home/rupesh/Desktop/dump/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage/States.cpp"
-  "/home/rupesh/Desktop/dump/MAPS/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/react/renderer/components/rnasyncstorage/rnasyncstorageJSI-generated.cpp"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")
