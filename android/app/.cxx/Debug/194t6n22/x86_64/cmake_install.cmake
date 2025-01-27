@@ -46,6 +46,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86_64/rnasyncstorage_autolinked_build/cmake_install.cmake")
   include("/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86_64/BatteryOptimizationCheck_autolinked_build/cmake_install.cmake")
+  include("/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/x86_64/BlePlx_autolinked_build/cmake_install.cmake")
 
 endif()
 

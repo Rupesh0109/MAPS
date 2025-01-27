@@ -180,15 +180,15 @@ const App = () => {
                         ? 'Allowed to handle notifications'
                         : 'NOT allowed to handle notifications'}
                 </Text>
+                {(!hasPermission)?
                 <Button
-                    title="Open Configuration"
-                    onPress={handleOnPressPermissionButton}
-                    disabled={hasPermission}
-                />
-            </View>
-
-            {/* Battery Optimization */}
-            <View style={styles.buttonWrapper}>
+                title="Open Configuration"
+                onPress={handleOnPressPermissionButton}
+                disabled={hasPermission}
+            />
+                :null}
+                
+            
                 <Text
                     style={[
                         styles.permissionStatus,
@@ -198,11 +198,13 @@ const App = () => {
                         ? 'Battery optimization disabled'
                         : 'Battery optimization not disabled'}
                 </Text>
+                {(!hasBatteryPermission)?
                 <Button
-                    title="Open Battery Optimization"
-                    onPress={handleOnPressBatteryPermissionButton}
-                    disabled={hasBatteryPermission}
+                title="Open Battery Optimization"
+                onPress={handleOnPressBatteryPermissionButton}
+                disabled={hasBatteryPermission}
                 />
+                :null}
             </View>
 
             {/* App Selection */}
