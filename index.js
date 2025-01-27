@@ -30,7 +30,7 @@ const headlessNotificationListener = async ({ notification }) => {
           totdistanc: distanceStr,
           eta: cleanedEtaStr,
         };
-        console.log(necdata.distance);
+        console.log(necdata);
         // Store navigation data in AsyncStorage
         await AsyncStorage.setItem('@navigationNotification', JSON.stringify(necdata));
       } else {
