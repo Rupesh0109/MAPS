@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "BatteryOptimizationCheck_autolinked_build",
+		"source" : "/home/rupesh/Desktop/dump/MAPS/MAPS/node_modules/@saserinn/react-native-battery-optimization-check/android/build/generated/source/codegen/jni"
+	}
+}

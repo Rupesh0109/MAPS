@@ -13,6 +13,7 @@ import {
 import RNAndroidNotificationListener from 'react-native-android-notification-listener'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import styles from './styles'
+import { BatteryOptEnabled, OpenOptimizationSettings } from '@saserinn/react-native-battery-optimization-check';
 
 let interval: any = null
 
@@ -82,6 +83,7 @@ const Notification: React.FC<INotificationProps> = ({
 
 function App() {
     const [hasPermission, setHasPermission] = useState(false)
+    const [hasBatteryPermission, setHasBatteryPermission] = useState(false);
     const [lastNotification, setLastNotification] = useState<any>(null)
 
     const handleOnPressPermissionButton = async () => {
@@ -91,6 +93,9 @@ function App() {
          */
         RNAndroidNotificationListener.requestPermission()
     }
+    const handleOnPressBatteryPermissionButton = () => {
+        OpenOptimizationSettings();
+    };
 
     const handleAppStateChange = async (
         nextAppState: string,
@@ -100,12 +105,15 @@ function App() {
             const status =
                 await RNAndroidNotificationListener.getPermissionStatus()
             setHasPermission(status !== 'denied')
+
+            const batteryStatus = await BatteryOptEnabled();
+            setHasBatteryPermission(!batteryStatus);
         }
     }
 
     const handleCheckNotificationInterval = async () => {
         const lastStoredNotification = await AsyncStorage.getItem(
-            '@lastNotification'
+            '@mapsNotification'
         )
 
         if (lastStoredNotification) {
@@ -162,12 +170,33 @@ function App() {
                         ? 'Allowed to handle notifications'
                         : 'NOT allowed to handle notifications'}
                 </Text>
+                {(!hasPermission)?
                 <Button
-                    title='Open Configuration'
-                    onPress={handleOnPressPermissionButton}
-                    disabled={hasPermission}
+                title="Open Configuration"
+                onPress={handleOnPressPermissionButton}
+                disabled={hasPermission}
+            />
+                :null}
+                
+            
+                <Text
+                    style={[
+                        styles.permissionStatus,
+                        { color: hasBatteryPermission ? 'green' : 'red' },
+                    ]}>
+                    {hasBatteryPermission
+                        ? 'Battery optimization disabled'
+                        : 'Battery optimization not disabled'}
+                </Text>
+                {(!hasBatteryPermission)?
+                <Button
+                title="Open Battery Optimization"
+                onPress={handleOnPressBatteryPermissionButton}
+                disabled={hasBatteryPermission}
                 />
+                :null}
             </View>
+
             <View style={styles.notificationsWrapper}>
                 {lastNotification && !hasGroupedMessages && (
                     <ScrollView style={styles.scrollView}>

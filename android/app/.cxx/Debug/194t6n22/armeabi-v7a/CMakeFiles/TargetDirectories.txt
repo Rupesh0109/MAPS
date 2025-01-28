@@ -4,3 +4,6 @@
 /home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/armeabi-v7a/rnasyncstorage_autolinked_build/CMakeFiles/react_codegen_rnasyncstorage.dir
 /home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/armeabi-v7a/rnasyncstorage_autolinked_build/CMakeFiles/edit_cache.dir
 /home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/armeabi-v7a/rnasyncstorage_autolinked_build/CMakeFiles/rebuild_cache.dir
+/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/armeabi-v7a/BatteryOptimizationCheck_autolinked_build/CMakeFiles/react_codegen_BatteryOptimizationCheck.dir
+/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/armeabi-v7a/BatteryOptimizationCheck_autolinked_build/CMakeFiles/edit_cache.dir
+/home/rupesh/Desktop/dump/MAPS/MAPS/android/app/.cxx/Debug/194t6n22/armeabi-v7a/BatteryOptimizationCheck_autolinked_build/CMakeFiles/rebuild_cache.dir
