@@ -17,7 +17,7 @@ import { BatteryOptEnabled, OpenOptimizationSettings } from '@saserinn/react-nat
 
 let interval: any = null
 
-interface INotificationProps {
+interface MNotificationProps {
     time: string
     direction: string
     distance: string
@@ -26,7 +26,47 @@ interface INotificationProps {
     totdistanc?: string // optional total distance
 }
 
-const Notification: React.FC<INotificationProps> = ({
+interface WNotificationProps{
+
+icon: string
+text: string
+app: string
+timeString: string
+messages:string[]
+}
+
+const WhNotification:React.FC<WNotificationProps>=({
+icon,
+text,
+app,
+timeString,
+messages,
+})=>{
+
+const date= new Date(timeString);
+const cleanText = (text: string) => text.replace(/\u00A0/g, ' ')
+const msg=JSON.parse(messages);
+console.log("MSG",msg);
+//date.toLocaleString()
+return(
+
+    <View style={styles.notificationWrapper}>
+            <View style={styles.notification}>
+                <View style={styles.imagesWrapper}>
+                    {!!icon && (
+                        <View style={styles.notificationIconWrapper}>
+                            <Image
+                                source={{ uri: icon }}
+                                style={styles.notificationIcon}
+                            />
+                        </View>
+                    )}
+                </View>
+                <View style={styles.notificationInfoWrapper}>
+                    {!!timeString && (
+                        <Text style={styles.textInfo}>{`Time: ${cleanText(timeString)}`}</T
+
+const MapsNotification: React.FC<MNotificationProps> = ({
     icon,
     time,
     direction,
@@ -82,144 +122,189 @@ const Notification: React.FC<INotificationProps> = ({
 }
 
 function App() {
-    const [hasPermission, setHasPermission] = useState(false)
+    const [hasPermission, setHasPermission] = useState(false);
     const [hasBatteryPermission, setHasBatteryPermission] = useState(false);
-    const [lastNotification, setLastNotification] = useState<any>(null)
+    const [whatsapppermission, setwhatsapppermission] = useState(false);
+    const [phonepermission, setphonepermission] = useState(false);
+    const [otherpermission, setotherpermission] = useState(false);
+
+    const [lastMapsNotification, setLastMapsNotification] = useState<any>(null);
+    const [lastWhatsappNotification, setLastWhatsappNotification] = useState<any>(null);
+    const [lastPhoneNotification, setLastPhoneNotification] = useState<any>(null);
+    const [lastOtherNotification, setLastOtherNotification] = useState<any>(null);
 
     const handleOnPressPermissionButton = async () => {
-        /**
-         * Open the notification settings so the user
-         * can enable it
-         */
-        RNAndroidNotificationListener.requestPermission()
-    }
+        RNAndroidNotificationListener.requestPermission();
+    };
+
     const handleOnPressBatteryPermissionButton = () => {
         OpenOptimizationSettings();
     };
 
-    const handleAppStateChange = async (
-        nextAppState: string,
-        force = false
-    ) => {
+    const handleAppStateChange = async (nextAppState: string, force = false) => {
         if (nextAppState === 'active' || force) {
-            const status =
-                await RNAndroidNotificationListener.getPermissionStatus()
-            setHasPermission(status !== 'denied')
+            const status = await RNAndroidNotificationListener.getPermissionStatus();
+            setHasPermission(status !== 'denied');
 
             const batteryStatus = await BatteryOptEnabled();
             setHasBatteryPermission(!batteryStatus);
         }
-    }
+    };
 
-    const handleCheckNotificationInterval = async () => {
-        const lastStoredNotification = await AsyncStorage.getItem(
-            '@mapsNotification'
-        )
-
-        if (lastStoredNotification) {
-            /**
-             * As the notification is a JSON string,
-             * here I just parse it
-             */
-            setLastNotification(JSON.parse(lastStoredNotification))
+    const fetchMapsNotification = async () => {
+        const lastStoredMapsNotification = await AsyncStorage.getItem('@mapsNotification');
+        if (lastStoredMapsNotification) {
+            setLastMapsNotification(JSON.parse(lastStoredMapsNotification));
         }
-    }
+    };
+
+    const fetchWhatsappNotification = async () => {
+        const lastStoredWhatsappNotification = await AsyncStorage.getItem('@whatsappNotification');
+        if (lastStoredWhatsappNotification) {
+            setLastWhatsappNotification(JSON.parse(lastStoredWhatsappNotification));
+        }
+    };
+
+    const fetchphoneNotification = async () => {
+        const lastStoredPhoneNotification = await AsyncStorage.getItem('@phoneNotification');
+        if (lastStoredPhoneNotification) {
+            setLastPhoneNotification(JSON.parse(lastStoredPhoneNotification));
+        }
+    };
+
+    const fetchotherNotification = async () => {
+        const lastStoredOtherNotification = await AsyncStorage.getItem('@otherNotification');
+        if (lastStoredOtherNotification) {
+            setLastOtherNotification(JSON.parse(lastStoredOtherNotification));
+        }
+    };
 
     useEffect(() => {
-        clearInterval(interval)
+        const fetchAllNotifications = async () => {
+            await fetchMapsNotification();
+            if (whatsapppermission) await fetchWhatsappNotification();
+            if (phonepermission) await fetchphoneNotification();
+            if (otherpermission) await fetchotherNotification();
+        };
 
-        /**
-         * Just setting an interval to check if
-         * there is a notification in AsyncStorage
-         * so I can show it in the application
-         */
-        interval = setInterval(handleCheckNotificationInterval, 1000)
+        const interval = setInterval(fetchAllNotifications, 1000);
 
-        const listener = AppState.addEventListener(
-            'change',
-            handleAppStateChange
-        )
+        const listener = AppState.addEventListener('change', handleAppStateChange);
 
-        handleAppStateChange('', true)
+        handleAppStateChange('', true);
 
         return () => {
-            clearInterval(interval)
-            listener.remove()
-        }
-    }, [])
+            clearInterval(interval);
+            listener.remove();
+        };
+    }, [whatsapppermission, phonepermission, otherpermission]);
 
     const hasGroupedMessages =
-        lastNotification &&
-        lastNotification.groupedMessages &&
-        lastNotification.groupedMessages.length > 0
-
-    // // Debugging: Log the last notification
-    // useEffect(() => {
-    //     console.log('Last Notification:', lastNotification)
-    // }, [lastNotification])
+        lastWhatsappNotification &&
+        lastWhatsappNotification.groupedMessages &&
+        lastWhatsappNotification.groupedMessages.length > 0;
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.buttonWrapper}>
-                <Text
-                    style={[
-                        styles.permissionStatus,
-                        { color: hasPermission ? 'green' : 'red' },
-                    ]}>
-                    {hasPermission
-                        ? 'Allowed to handle notifications'
-                        : 'NOT allowed to handle notifications'}
-                </Text>
-                {(!hasPermission)?
-                <Button
-                title="Open Configuration"
-                onPress={handleOnPressPermissionButton}
-                disabled={hasPermission}
-            />
-                :null}
-                
-            
-                <Text
-                    style={[
-                        styles.permissionStatus,
-                        { color: hasBatteryPermission ? 'green' : 'red' },
-                    ]}>
-                    {hasBatteryPermission
-                        ? 'Battery optimization disabled'
-                        : 'Battery optimization not disabled'}
-                </Text>
-                {(!hasBatteryPermission)?
-                <Button
-                title="Open Battery Optimization"
-                onPress={handleOnPressBatteryPermissionButton}
-                disabled={hasBatteryPermission}
-                />
-                :null}
-            </View>
+            <ScrollView>
+                <View style={styles.buttonWrapper}>
+                    <Text style={[styles.permissionStatus, { color: hasPermission ? 'green' : 'red' }]}>
+                        {hasPermission ? 'Allowed to handle notifications' : 'NOT allowed to handle notifications'}
+                    </Text>
+                    {!hasPermission && (
+                        <Button
+                            title="Open Configuration"
+                            onPress={handleOnPressPermissionButton}
+                            disabled={hasPermission}
+                        />
+                    )}
 
-            <View style={styles.notificationsWrapper}>
-                {lastNotification && !hasGroupedMessages && (
-                    <ScrollView style={styles.scrollView}>
-                        <Notification {...lastNotification} />
-                    </ScrollView>
-                )}
-                {lastNotification && hasGroupedMessages && (
-                    <FlatList
-                        data={lastNotification.groupedMessages}
-                        keyExtractor={(_, index) => index.toString()}
-                        renderItem={({ item }) => (
-                            <Notification
-                                app={lastNotification.app}
-                                {...item}
+                    <Text style={[styles.permissionStatus, { color: hasBatteryPermission ? 'green' : 'red' }]}>
+                        {hasBatteryPermission ? 'Battery optimization disabled' : 'Battery optimization not disabled'}
+                    </Text>
+                    {!hasBatteryPermission && (
+                        <Button
+                            title="Open Battery Optimization"
+                            onPress={handleOnPressBatteryPermissionButton}
+                            disabled={hasBatteryPermission}
+                        />
+                    )}
+                </View>
+
+                <View style={styles.switchWrapper}>
+                    <Switch value={whatsapppermission} onValueChange={setwhatsapppermission} />
+                    <Text>WhatsApp</Text>
+                </View>
+
+                <View style={styles.switchWrapper}>
+                    <Switch value={phonepermission} onValueChange={setphonepermission} />
+                    <Text>Phone</Text>
+                </View>
+
+                <View style={styles.switchWrapper}>
+                    <Switch value={otherpermission} onValueChange={setotherpermission} />
+                    <Text>Other</Text>
+                </View>
+
+                {/* Maps Display Section */}
+                <View style={styles.notificationsWrapper}>
+                    {lastMapsNotification && (
+                        <ScrollView style={styles.scrollView}>
+                            <MapsNotification {...lastMapsNotification} />
+                        </ScrollView>
+                    )}
+                </View>
+
+                 {/* WhatsApp Display Section */}
+                {whatsapppermission && (
+                    <View>
+                        {lastWhatsappNotification && (
+                            <ScrollView style={styles.scrollView}>
+                                <WhNotification {...lastWhatsappNotification} />
+                            </ScrollView>
+                        )}
+                        {lastWhatsappNotification && hasGroupedMessages && (
+                            <FlatList
+                                data={lastWhatsappNotification.groupedMessages}
+                                keyExtractor={(item, index) => index.toString()}
+                                renderItem={({ item }) => (
+                                    <WhNotification
+                                        app={lastWhatsappNotification.app}
+                                        {...item}
+                                    />
+                                )}
                             />
                         )}
-                    />
+                    </View>
                 )}
-            </View>
-            
-            
+{/*
+                
+                {phonepermission && (
+                    <View>
+                        {lastPhoneNotification && (
+                            <ScrollView style={styles.scrollView}>
+                                <Notification {...lastPhoneNotification} />
+                            </ScrollView>
+                        )}
+                    </View>
+                )}
+
+               
+                {otherpermission && (
+                    <View>
+                        {lastOtherNotification && (
+                            <ScrollView style={styles.scrollView}>
+                                <Notification {...lastOtherNotification} />
+                            </ScrollView>
+                        )}
+                    </View>
+                )} 
+                 
+                 */}
+    
+            </ScrollView>
         </SafeAreaView>
-    )
+    );
 }
 
-export default App
+export default App;

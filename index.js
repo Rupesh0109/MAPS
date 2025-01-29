@@ -2,7 +2,7 @@ import { AppRegistry } from 'react-native';
 import { RNAndroidNotificationListenerHeadlessJsName } from 'react-native-android-notification-listener';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { name as appName } from './app.json';
-import App from './App';
+import App from './src/screens/App';
 
 
 const headlessNotificationListener = async ({ notification }) => {
@@ -20,21 +20,23 @@ const headlessNotificationListener = async ({ notification }) => {
           icon: data.iconLarge,
           text: data.text,
           app: data.app,
+          direction:data.text,
+          distance:data.title,
           time: data.subText?.split(' · ')[0] || '',
-          distance: data.subText?.split(' · ')[1] || '',
+          totdistanc: data.subText?.split(' · ')[1] || '',
           eta: data.subText?.split(' · ')[2]?.replace(' ETA', '') || '',
         };
       } 
       else if (data.app === 'com.whatsapp') {
         storageKey = '@whatsappNotification';
         appData = {
-            icon: data.iconLarge,
+            icon: data.icon,
             text: data.text,
             app: data.app,
-            time: data.subText || '',
+            timeString: data.time || '',
             messages: data.groupedMessages && data.groupedMessages.length > 0 
                       ? data.groupedMessages
-                      : [data.text]  
+                      : [{"title":"","text":data.text}]  
         };
     }    
       else if (data.app === 'com.android.phone') {
@@ -57,6 +59,7 @@ const headlessNotificationListener = async ({ notification }) => {
         };
       }
       await AsyncStorage.setItem(storageKey, JSON.stringify(appData));
+      
     } catch (error) {
       console.error('Error storing notification:', error);
     }
