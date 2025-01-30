@@ -9,6 +9,7 @@ interface MNotificationProps {
     icon: string;
     eta?: string;
     totdistanc?: string;
+    app: string;
 }
 
 const MapsNotification: React.FC<MNotificationProps> = ({
@@ -18,7 +19,7 @@ const MapsNotification: React.FC<MNotificationProps> = ({
     distance,
     eta,
     totdistanc,
-    
+    app
 }) => {
     const [timeStr, distanceStr, etaStr] = time?.split(' · ') || [];
 
@@ -35,6 +36,11 @@ const MapsNotification: React.FC<MNotificationProps> = ({
                     )}
                 </View>
                 <View style={styles.notificationInfoWrapper}>
+                    {!!app && (
+                        <View style={styles.appInfo}>
+                            <Text style={styles.appName}>{app}</Text>
+                        </View>
+                    )}
                     {!!timeStr && (
                         <Text style={styles.textInfo}>{`Time Left: ${cleanText(timeStr)}`}</Text>
                     )}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, Text, Button, View, Switch, ScrollView, FlatList, AppState } from 'react-native';
+import { SafeAreaView, Text, Button, View, Switch, ScrollView, AppState } from 'react-native';
 import RNAndroidNotificationListener from 'react-native-android-notification-listener';
 import { BatteryOptEnabled, OpenOptimizationSettings } from '@saserinn/react-native-battery-optimization-check';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,6 +7,7 @@ import { saveSwitchState, getSwitchState } from '../utils/storage';
 import MapsNotification from '../components/MapsNotification';
 import WhNotification from '../components/WhNotification';
 import styles from '../styles';
+import PhoneNotification from '../components/PhoneNotification';
 
 const App = () => {
     const [hasPermission, setHasPermission] = useState(false);
@@ -20,25 +21,29 @@ const App = () => {
     const [lastPhoneNotification, setLastPhoneNotification] = useState<any>(null);
     const [lastOtherNotification, setLastOtherNotification] = useState<any>(null);
 
-
     const handleOnPressPermissionButton = () => {
         RNAndroidNotificationListener.requestPermission();
     };
 
-    const handleOnPressBatteryPermissionButton = () => {
+    const handleOnPressBatteryPermissionButton = async () => {
         OpenOptimizationSettings();
+        // Wait for a moment to allow settings to open and update the state
+        setTimeout(async () => {
+            // Recheck battery optimization status after 2 seconds
+            const batteryStatus = await BatteryOptEnabled();
+            setHasBatteryPermission(!batteryStatus);
+        }, 2000); // Increased timeout to 2 seconds
     };
 
     const handleAppStateChange = async (nextAppState: string, force = false) => {
         if (nextAppState === 'active' || force) {
             const status = await RNAndroidNotificationListener.getPermissionStatus();
-            setHasPermission(status !== 'denied');
-
             const batteryStatus = await BatteryOptEnabled();
+            console.log(batteryStatus);
             setHasBatteryPermission(!batteryStatus);
+            setHasPermission(status !== 'denied');
         }
     };
-
 
     const fetchMapsNotification = async () => {
         const lastStoredMapsNotification = await AsyncStorage.getItem('@mapsNotification');
@@ -66,15 +71,17 @@ const App = () => {
             setLastOtherNotification(JSON.parse(lastStoredOtherNotification));
         }
     };
-    const initialLoadRef = useRef(true); 
-    const [initialLoadComplete, setInitialLoadComplete] = useState(false); 
+
+    const initialLoadRef = useRef(true);
+    const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+
     useEffect(() => {
         const loadSwitchStates = async () => {
             try {
-                const [ 
-                    whatsappState, 
-                    phoneState, 
-                    otherState 
+                const [
+                    whatsappState,
+                    phoneState,
+                    otherState
                 ] = await Promise.all([
                     getSwitchState('@whatsappPermission'),
                     getSwitchState('@phonePermission'),
@@ -84,19 +91,19 @@ const App = () => {
                 setWhatsappPermission(whatsappState);
                 setPhonePermission(phoneState);
                 setOtherPermission(otherState);
-                setInitialLoadComplete(true); 
+                setInitialLoadComplete(true);
             } catch (error) {
-                console.error('Error loading switch states:', error); 
+                console.error('Error loading switch states:', error);
                 setInitialLoadComplete(true); // Set to true even on error
             }
 
-            initialLoadRef.current = false; 
+            initialLoadRef.current = false;
         };
-        
+
         loadSwitchStates();
         fetchMapsNotification();
         fetchWhatsappNotification();
-        handleAppStateChange('',true);
+        handleAppStateChange('', true);
     }, []);
 
     useEffect(() => {
@@ -104,10 +111,11 @@ const App = () => {
     }, [whatsapppermission]);
     useEffect(() => {
         saveSwitchState('@phonePermission', phonepermission);
-    },[phonepermission])
+    }, [phonepermission]);
     useEffect(() => {
         saveSwitchState('@otherPermission', otherpermission);
-    },[otherpermission])
+    }, [otherpermission]);
+
     useEffect(() => {
         const fetchAllNotifications = async () => {
             await fetchMapsNotification();
@@ -120,8 +128,6 @@ const App = () => {
 
         const listener = AppState.addEventListener('change', handleAppStateChange);
 
-        handleAppStateChange('', true);
-
         return () => {
             clearInterval(interval);
             listener.remove();
@@ -130,7 +136,7 @@ const App = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.buttonWrapper}>
                     <Text style={[styles.permissionStatus, { color: hasPermission ? 'green' : 'red' }]}>
                         {hasPermission ? 'Allowed to handle notifications' : 'NOT allowed to handle notifications'}
@@ -176,6 +182,16 @@ const App = () => {
                 {whatsapppermission && lastWhatsappNotification && (
                     <View>
                         <WhNotification {...lastWhatsappNotification} />
+                    </View>
+                )}
+                {phonepermission && lastPhoneNotification && (
+                    <View>
+                        <PhoneNotification {...lastPhoneNotification} />
+                    </View>
+                )}
+                {otherpermission && lastOtherNotification && (
+                    <View>
+                        <PhoneNotification {...lastOtherNotification} />
                     </View>
                 )}
             </ScrollView>
