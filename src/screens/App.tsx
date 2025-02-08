@@ -1,25 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView, Text, Button, View, Switch, ScrollView, AppState } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import RNAndroidNotificationListener from 'react-native-android-notification-listener';
 import { BatteryOptEnabled, OpenOptimizationSettings } from '@saserinn/react-native-battery-optimization-check';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { saveSwitchState, getSwitchState } from '../utils/storage';
 import MapsNotification from '../components/MapsNotification';
 import WhNotification from '../components/WhNotification';
-import styles from '../styles';
 import PhoneNotification from '../components/PhoneNotification';
+import styles from '../styles';
+import { RootState } from '../redux/store';
+import { setWhatsappEnabled, setPhoneEnabled, setOtherEnabled } from '../redux/notificationSlice';
 
 const App = () => {
+    const dispatch = useDispatch();
+
     const [hasPermission, setHasPermission] = useState(false);
     const [hasBatteryPermission, setHasBatteryPermission] = useState(false);
-    const [whatsapppermission, setWhatsappPermission] = useState(false);
-    const [phonepermission, setPhonePermission] = useState(false);
-    const [otherpermission, setOtherPermission] = useState(false);
 
-    const [lastMapsNotification, setLastMapsNotification] = useState<any>(null);
-    const [lastWhatsappNotification, setLastWhatsappNotification] = useState<any>(null);
-    const [lastPhoneNotification, setLastPhoneNotification] = useState<any>(null);
-    const [lastOtherNotification, setLastOtherNotification] = useState<any>(null);
+    // Redux: Fetching notifications from the store
+    const lastMapsNotification = useSelector((state: RootState) => state.notifications.mapsNotification);
+    const lastWhatsappNotification = useSelector((state: RootState) => state.notifications.whatsappNotification);
+    const lastPhoneNotification = useSelector((state: RootState) => state.notifications.phoneNotification);
+    const lastOtherNotification = useSelector((state: RootState) => state.notifications.otherNotification);
+
+    // Redux: Fetching switch states from the store
+    const whatsapppermission = useSelector((state: RootState) => state.notifications.whatsappEnabled);
+    const phonepermission = useSelector((state: RootState) => state.notifications.phoneEnabled);
+    const otherpermission = useSelector((state: RootState) => state.notifications.otherEnabled);
 
     const handleOnPressPermissionButton = () => {
         RNAndroidNotificationListener.requestPermission();
@@ -27,53 +34,22 @@ const App = () => {
 
     const handleOnPressBatteryPermissionButton = async () => {
         OpenOptimizationSettings();
-        // Wait for a moment to allow settings to open and update the state
         setTimeout(async () => {
-            // Recheck battery optimization status after 2 seconds
             const batteryStatus = await BatteryOptEnabled();
             setHasBatteryPermission(!batteryStatus);
-        }, 2000); // Increased timeout to 2 seconds
+        }, 2000);
     };
 
     const handleAppStateChange = async (nextAppState: string, force = false) => {
         if (nextAppState === 'active' || force) {
             const status = await RNAndroidNotificationListener.getPermissionStatus();
             const batteryStatus = await BatteryOptEnabled();
-            console.log(batteryStatus);
             setHasBatteryPermission(!batteryStatus);
             setHasPermission(status !== 'denied');
         }
     };
 
-    const fetchMapsNotification = async () => {
-        const lastStoredMapsNotification = await AsyncStorage.getItem('@mapsNotification');
-        if (lastStoredMapsNotification) {
-            setLastMapsNotification(JSON.parse(lastStoredMapsNotification));
-        }
-    };
-
-    const fetchWhatsappNotification = async () => {
-        const lastStoredWhatsappNotification = await AsyncStorage.getItem('@whatsappNotification');
-        if (lastStoredWhatsappNotification) {
-            setLastWhatsappNotification(JSON.parse(lastStoredWhatsappNotification));
-        }
-    };
-    const fetchphoneNotification = async () => {
-        const lastStoredPhoneNotification = await AsyncStorage.getItem('@phoneNotification');
-        if (lastStoredPhoneNotification) {
-            setLastPhoneNotification(JSON.parse(lastStoredPhoneNotification));
-        }
-    };
-
-    const fetchotherNotification = async () => {
-        const lastStoredOtherNotification = await AsyncStorage.getItem('@otherNotification');
-        if (lastStoredOtherNotification) {
-            setLastOtherNotification(JSON.parse(lastStoredOtherNotification));
-        }
-    };
-
     const initialLoadRef = useRef(true);
-    const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
     useEffect(() => {
         const loadSwitchStates = async () => {
@@ -88,51 +64,38 @@ const App = () => {
                     getSwitchState('@otherPermission'),
                 ]);
 
-                setWhatsappPermission(whatsappState);
-                setPhonePermission(phoneState);
-                setOtherPermission(otherState);
-                setInitialLoadComplete(true);
+                dispatch(setWhatsappEnabled(whatsappState));
+                dispatch(setPhoneEnabled(phoneState));
+                dispatch(setOtherEnabled(otherState));
             } catch (error) {
                 console.error('Error loading switch states:', error);
-                setInitialLoadComplete(true); // Set to true even on error
             }
 
             initialLoadRef.current = false;
         };
 
         loadSwitchStates();
-        fetchMapsNotification();
-        fetchWhatsappNotification();
         handleAppStateChange('', true);
     }, []);
 
-    useEffect(() => {
-        saveSwitchState('@whatsappPermission', whatsapppermission);
-    }, [whatsapppermission]);
-    useEffect(() => {
-        saveSwitchState('@phonePermission', phonepermission);
-    }, [phonepermission]);
-    useEffect(() => {
-        saveSwitchState('@otherPermission', otherpermission);
-    }, [otherpermission]);
+    // Handle switch toggle and save to AsyncStorage
+    const toggleSwitch = (type: 'whatsapp' | 'phone' | 'other', value: boolean) => {
+        if (type === 'whatsapp') {
+            dispatch(setWhatsappEnabled(value));
+            saveSwitchState('@whatsappPermission', value);
+        } else if (type === 'phone') {
+            dispatch(setPhoneEnabled(value));
+            saveSwitchState('@phonePermission', value);
+        } else if (type === 'other') {
+            dispatch(setOtherEnabled(value));
+            saveSwitchState('@otherPermission', value);
+        }
+    };
 
     useEffect(() => {
-        const fetchAllNotifications = async () => {
-            await fetchMapsNotification();
-            if (whatsapppermission) await fetchWhatsappNotification();
-            if (phonepermission) await fetchphoneNotification();
-            if (otherpermission) await fetchotherNotification();
-        };
-
-        const interval = setInterval(fetchAllNotifications, 500);
-
         const listener = AppState.addEventListener('change', handleAppStateChange);
-
-        return () => {
-            clearInterval(interval);
-            listener.remove();
-        };
-    }, [whatsapppermission, phonepermission, otherpermission]);
+        return () => listener.remove();
+    }, []);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -160,21 +123,25 @@ const App = () => {
                     )}
                 </View>
 
+                {/* WhatsApp Notification Toggle */}
                 <View style={styles.switchWrapper}>
-                    <Switch value={whatsapppermission} onValueChange={setWhatsappPermission} />
+                    <Switch value={whatsapppermission} onValueChange={(value) => toggleSwitch('whatsapp', value)} />
                     <Text>WhatsApp</Text>
                 </View>
 
+                {/* Phone Notification Toggle */}
                 <View style={styles.switchWrapper}>
-                    <Switch value={phonepermission} onValueChange={setPhonePermission} />
+                    <Switch value={phonepermission} onValueChange={(value) => toggleSwitch('phone', value)} />
                     <Text>Phone</Text>
                 </View>
 
+                {/* Other Notification Toggle */}
                 <View style={styles.switchWrapper}>
-                    <Switch value={otherpermission} onValueChange={setOtherPermission} />
+                    <Switch value={otherpermission} onValueChange={(value) => toggleSwitch('other', value)} />
                     <Text>Other</Text>
                 </View>
 
+                {/* Display Notifications */}
                 <View style={styles.notificationsWrapper}>
                     {lastMapsNotification && <MapsNotification {...lastMapsNotification} />}
                 </View>

@@ -73,7 +73,7 @@ const MapsNotification: React.FC<MNotificationProps> = ({
     distance,
     eta,
     totdistanc,
-}) => {
+}) => {z
     // Split the time string into time, distance, and eta
     const [timeStr, distanceStr, etaStr] = time?.split(' · ') || []
 
