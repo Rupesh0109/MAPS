@@ -34,17 +34,33 @@ const App = () => {
 
     const handleOnPressBatteryPermissionButton = async () => {
         OpenOptimizationSettings();
-        setTimeout(async () => {
+    
+        // Check every second after returning from settings
+        const interval = setInterval(async () => {
             const batteryStatus = await BatteryOptEnabled();
-            setHasBatteryPermission(!batteryStatus);
-        }, 2000);
+            const isDisabled = !batteryStatus;
+    
+            setHasBatteryPermission(isDisabled);  // ✅ Immediately update UI
+    
+            if (isDisabled) {
+                clearInterval(interval); // ✅ Stop checking when the state is updated
+            }
+        }, 1000); // Poll every second
+    
+        // Stop polling after 10 seconds
+        setTimeout(() => clearInterval(interval), 10000);
     };
+    
+
+    
+    
 
     const handleAppStateChange = async (nextAppState: string, force = false) => {
         if (nextAppState === 'active' || force) {
             const status = await RNAndroidNotificationListener.getPermissionStatus();
             const batteryStatus = await BatteryOptEnabled();
-            setHasBatteryPermission(!batteryStatus);
+            
+            setHasBatteryPermission(!batteryStatus);  // ✅ Fix: Now correctly updates the UI
             setHasPermission(status !== 'denied');
         }
     };
@@ -93,8 +109,14 @@ const App = () => {
     };
 
     useEffect(() => {
+        const listener1 = AppState.addEventListener('change', async (nextAppState) => {
+            if (nextAppState === 'active') {
+                const batteryStatus = await BatteryOptEnabled();
+                setHasBatteryPermission(!batteryStatus); // ✅ Ensure UI updates immediately
+            }
+        });
         const listener = AppState.addEventListener('change', handleAppStateChange);
-        return () => listener.remove();
+        return () => {listener.remove();listener1.remove();}
     }, []);
 
     return (
