@@ -7,10 +7,9 @@ import DeviceInfo from 'react-native-device-info';
 import store from './src/redux/store';
 import {
   setMapsNotification,
-  setWhatsappNotification,
   setPhoneNotification,
-  setOtherNotification,
 } from './src/redux/notificationSlice';
+import { getSwitchState } from './src/utils/storage';
 
 const getAppName = (packageName) => {
   try {
@@ -26,6 +25,7 @@ const headlessNotificationListener = async ({ notification }) => {
     try {
       const data = JSON.parse(notification);
       console.log(data);
+      const phonePermission = await getSwitchState('@phonePermission');
 
       const phoneApps = [
         'com.google.android.dialer',
@@ -58,20 +58,8 @@ const headlessNotificationListener = async ({ notification }) => {
           eta: data.subText?.split(' · ')[2]?.replace(' ETA', '') || '',
         };
         store.dispatch(setMapsNotification(appData));
-      } 
-      else if (data.app === 'com.whatsapp') {
-        appData = {
-          icon: data.iconLarge || data.icon,
-          text: data.text,
-          app: appName,
-          timeString: data.time || '',
-          messages: data.groupedMessages?.length 
-                    ? data.groupedMessages 
-                    : [{ title: data.title, text: data.text }],
-        };
-        store.dispatch(setWhatsappNotification(appData));
-      }    
-      else if (phoneApps.includes(data.app)) {
+      }     
+      else if (phoneApps.includes(data.app) &&phonePermission) {
         appData = {
           icon: data.iconLarge || data.icon,
           text: data.text,
@@ -81,23 +69,12 @@ const headlessNotificationListener = async ({ notification }) => {
         };
         store.dispatch(setPhoneNotification(appData));
       }
-      else {
-        appData = {
-          icon: data.iconLarge || data.icon,
-          text: data.text,
-          app: appName,
-          time: data.subText || '',
-          title: data.title,
-        };
-        store.dispatch(setOtherNotification(appData));
-      }
     } catch (error) {
       console.error('Error processing notification:', error);
     }
   }
 };
 
-// Wrap App with Redux Provider
 const ReduxApp = () => (
   <Provider store={store}>
     <App />

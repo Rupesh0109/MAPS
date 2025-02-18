@@ -5,11 +5,10 @@ import RNAndroidNotificationListener from 'react-native-android-notification-lis
 import { BatteryOptEnabled, OpenOptimizationSettings } from '@saserinn/react-native-battery-optimization-check';
 import { saveSwitchState, getSwitchState } from '../utils/storage';
 import MapsNotification from '../components/MapsNotification';
-import WhNotification from '../components/WhNotification';
 import PhoneNotification from '../components/PhoneNotification';
 import styles from '../styles';
 import { RootState } from '../redux/store';
-import { setWhatsappEnabled, setPhoneEnabled, setOtherEnabled } from '../redux/notificationSlice';
+import {  setPhoneEnabled} from '../redux/notificationSlice';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -19,14 +18,10 @@ const App = () => {
 
     // Redux: Fetching notifications from the store
     const lastMapsNotification = useSelector((state: RootState) => state.notifications.mapsNotification);
-    const lastWhatsappNotification = useSelector((state: RootState) => state.notifications.whatsappNotification);
     const lastPhoneNotification = useSelector((state: RootState) => state.notifications.phoneNotification);
-    const lastOtherNotification = useSelector((state: RootState) => state.notifications.otherNotification);
 
     // Redux: Fetching switch states from the store
-    const whatsapppermission = useSelector((state: RootState) => state.notifications.whatsappEnabled);
     const phonepermission = useSelector((state: RootState) => state.notifications.phoneEnabled);
-    const otherpermission = useSelector((state: RootState) => state.notifications.otherEnabled);
 
     const handleOnPressPermissionButton = () => {
         RNAndroidNotificationListener.requestPermission();
@@ -71,18 +66,12 @@ const App = () => {
         const loadSwitchStates = async () => {
             try {
                 const [
-                    whatsappState,
-                    phoneState,
-                    otherState
+                    phoneState
                 ] = await Promise.all([
-                    getSwitchState('@whatsappPermission'),
                     getSwitchState('@phonePermission'),
-                    getSwitchState('@otherPermission'),
                 ]);
 
-                dispatch(setWhatsappEnabled(whatsappState));
                 dispatch(setPhoneEnabled(phoneState));
-                dispatch(setOtherEnabled(otherState));
             } catch (error) {
                 console.error('Error loading switch states:', error);
             }
@@ -95,17 +84,11 @@ const App = () => {
     }, []);
 
     // Handle switch toggle and save to AsyncStorage
-    const toggleSwitch = (type: 'whatsapp' | 'phone' | 'other', value: boolean) => {
-        if (type === 'whatsapp') {
-            dispatch(setWhatsappEnabled(value));
-            saveSwitchState('@whatsappPermission', value);
-        } else if (type === 'phone') {
+    const toggleSwitch = (type: 'phone' , value: boolean) => {
+          if (type === 'phone') {
             dispatch(setPhoneEnabled(value));
             saveSwitchState('@phonePermission', value);
-        } else if (type === 'other') {
-            dispatch(setOtherEnabled(value));
-            saveSwitchState('@otherPermission', value);
-        }
+        } 
     };
 
     useEffect(() => {
@@ -145,11 +128,7 @@ const App = () => {
                     )}
                 </View>
 
-                {/* WhatsApp Notification Toggle */}
-                <View style={styles.switchWrapper}>
-                    <Switch value={whatsapppermission} onValueChange={(value) => toggleSwitch('whatsapp', value)} />
-                    <Text>WhatsApp</Text>
-                </View>
+
 
                 {/* Phone Notification Toggle */}
                 <View style={styles.switchWrapper}>
@@ -158,29 +137,15 @@ const App = () => {
                 </View>
 
                 {/* Other Notification Toggle */}
-                <View style={styles.switchWrapper}>
-                    <Switch value={otherpermission} onValueChange={(value) => toggleSwitch('other', value)} />
-                    <Text>Other</Text>
-                </View>
+                
 
                 {/* Display Notifications */}
                 <View style={styles.notificationsWrapper}>
                     {lastMapsNotification && <MapsNotification {...lastMapsNotification} />}
                 </View>
-
-                {whatsapppermission && lastWhatsappNotification && (
-                    <View>
-                        <WhNotification {...lastWhatsappNotification} />
-                    </View>
-                )}
                 {phonepermission && lastPhoneNotification && (
                     <View>
                         <PhoneNotification {...lastPhoneNotification} />
-                    </View>
-                )}
-                {otherpermission && lastOtherNotification && (
-                    <View>
-                        <PhoneNotification {...lastOtherNotification} />
                     </View>
                 )}
             </ScrollView>
