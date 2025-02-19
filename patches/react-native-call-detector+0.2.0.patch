@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-native-call-detector/android/build.gradle b/node_modules/react-native-call-detector/android/build.gradle
+index bd62c97..5d5e991 100644
+--- a/node_modules/react-native-call-detector/android/build.gradle
++++ b/node_modules/react-native-call-detector/android/build.gradle
+@@ -23,5 +23,5 @@ allprojects {
+ 
+ 
+ dependencies {
+-  compile 'com.facebook.react:react-native:+'
++  + implementation "com.facebook.react:react-native:+"
+ }
+\ No newline at end of file

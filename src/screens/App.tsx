@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, Text, Button, View, Switch, ScrollView, AppState } from 'react-native';
+import { SafeAreaView, Text, Button, View, Switch, ScrollView, AppState, Platform, PermissionsAndroid } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import RNAndroidNotificationListener from 'react-native-android-notification-listener';
 import { BatteryOptEnabled, OpenOptimizationSettings } from '@saserinn/react-native-battery-optimization-check';
@@ -9,12 +9,19 @@ import PhoneNotification from '../components/PhoneNotification';
 import styles from '../styles';
 import { RootState } from '../redux/store';
 import {  setPhoneEnabled} from '../redux/notificationSlice';
+import WifiManager from 'react-native-wifi-reborn';
+import axios from 'axios';
+
 
 const App = () => {
     const dispatch = useDispatch();
 
     const [hasPermission, setHasPermission] = useState(false);
     const [hasBatteryPermission, setHasBatteryPermission] = useState(false);
+    const[iswifienabled,setiswifiEnabled]=useState(false);
+    const[iswificonnected,setiswificonnected]=useState(false);
+
+    
 
     // Redux: Fetching notifications from the store
     const lastMapsNotification = useSelector((state: RootState) => state.notifications.mapsNotification);
@@ -27,6 +34,47 @@ const App = () => {
         RNAndroidNotificationListener.requestPermission();
     };
 
+    const connectToESP32 = async () => {
+        try {
+          await WifiManager.connectToProtectedSSID('ESP32-SoftAP', '123456789',false, false);
+          const ssid = await WifiManager.getCurrentWifiSSID();
+          
+          if (ssid === 'ESP32-SoftAP') {
+            console.log('Successfully connected to ESP32 SoftAP');
+            setiswificonnected(true);
+          } else {
+            console.log('Connected to a different network:', ssid);
+            setiswificonnected(false);
+          }
+        } catch (error) {
+          console.log('Failed to connect to ESP32:', error);
+          
+        }
+      };
+
+    const requestLocationPermission = async () => {
+        if (Platform.OS === 'android' && Platform.Version >= 23) {
+          try {
+            const granted = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+              {
+                title: 'Location Permission',
+                message: 'This app needs access to your location to check Wi-Fi status.',
+                buttonNeutral: 'Ask Me Later',
+                buttonNegative: 'Cancel',
+                buttonPositive: 'OK',
+              }
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+              console.log('Location permission granted');
+            } else {
+              console.log('Location permission denied');
+            }
+          } catch (err) {
+            console.warn(err);
+          }
+        }
+      };
     const handleOnPressBatteryPermissionButton = async () => {
         OpenOptimizationSettings();
     
@@ -47,15 +95,39 @@ const App = () => {
     };
     
 
-    
-    
 
+
+    const sendNotificationToESP32 = async (message: string) => {
+        try {
+            const response = await axios.post('http://192.168.4.1/data', message,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    timeout: 5000, // Set timeout to avoid hanging requests
+                }
+            );
+    
+            if (response.status === 200) {
+                console.log('Notification sent successfully to ESP32');
+            } else {
+                console.log('Failed to send notification:', response.status);
+            }
+        } catch (error) {
+            console.error('Error sending notification:', error);
+        }
+    };
+    
+    
+    
     const handleAppStateChange = async (nextAppState: string, force = false) => {
         if (nextAppState === 'active' || force) {
             const status = await RNAndroidNotificationListener.getPermissionStatus();
             const batteryStatus = await BatteryOptEnabled();
+            const wifistatus= await WifiManager.isEnabled();
             
-            setHasBatteryPermission(!batteryStatus);  // ✅ Fix: Now correctly updates the UI
+            setHasBatteryPermission(!batteryStatus);
+            setiswifiEnabled(wifistatus);  // ✅ Fix: Now correctly updates the UI
             setHasPermission(status !== 'denied');
         }
     };
@@ -80,6 +152,7 @@ const App = () => {
         };
 
         loadSwitchStates();
+        requestLocationPermission();
         handleAppStateChange('', true);
     }, []);
 
@@ -90,7 +163,17 @@ const App = () => {
             saveSwitchState('@phonePermission', value);
         } 
     };
-
+    useEffect(() => {
+        if (lastMapsNotification&&iswifienabled&&iswificonnected) {
+            sendNotificationToESP32(JSON.stringify(lastMapsNotification));
+        }
+    }, [lastMapsNotification]);
+    useEffect(() => {
+        if (lastPhoneNotification&&phonepermission&&iswificonnected&&iswifienabled) {
+            sendNotificationToESP32(JSON.stringify(lastPhoneNotification));
+        }
+    }, [lastPhoneNotification]);
+    
     useEffect(() => {
         const listener1 = AppState.addEventListener('change', async (nextAppState) => {
             if (nextAppState === 'active') {
@@ -126,7 +209,25 @@ const App = () => {
                             disabled={hasBatteryPermission}
                         />
                     )}
+
+            <Text style={[styles.permissionStatus, { color: iswifienabled ? 'green' : 'red' }]}>
+                        {iswifienabled ? 'Wifi Enabled' : 'Wifi Not Enabled'}
+                    </Text>
                 </View>
+                    
+              
+                    <Text style={[styles.permissionStatus, { color: iswificonnected ? 'green' : 'red' }]}>
+                        {iswificonnected ? 'Connected to device' : 'Not connected to device'}
+                    </Text>
+                    {iswifienabled&&!iswificonnected && (
+                        <Button
+                            title="Connect to Device"
+                            onPress={connectToESP32}
+                            disabled={iswificonnected}
+                        />
+                    )}
+                    
+                    
 
 
 
